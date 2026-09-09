@@ -1,2 +1,4 @@
 crypto-paper-trading-bot/data/*.csv
 crypto-paper-trading-bot/reports/*.json
+__pycache__/
+*.pyc
