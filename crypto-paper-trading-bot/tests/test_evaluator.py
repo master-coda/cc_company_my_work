@@ -27,3 +27,20 @@ def test_evaluate_handles_empty_trades():
     assert metrics["win_rate"] == 0.0
     assert metrics["risk_reward_ratio"] == 0.0
     assert metrics["profit_factor"] == 0.0
+
+
+def test_evaluate_all_winning_trades_scores_infinite_ratio():
+    trades = pd.DataFrame({"pnl": [100.0, 200.0, 50.0]})
+
+    metrics = evaluate(trades)
+
+    assert metrics["risk_reward_ratio"] == float("inf")
+    assert metrics["profit_factor"] == float("inf")
+
+
+def test_evaluate_max_drawdown_when_underwater_from_first_trade():
+    trades = pd.DataFrame({"pnl": [-100.0, -50.0]})
+
+    metrics = evaluate(trades)
+
+    assert metrics["max_drawdown"] == pytest.approx(150.0)

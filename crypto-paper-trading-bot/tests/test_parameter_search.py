@@ -38,3 +38,45 @@ def test_grid_search_picks_best_scoring_params():
     best = grid_search(df, FakeStrategyForGridSearch(), param_grid={"threshold": [1, 2, 3]})
 
     assert best == {"threshold": 2}
+
+
+class FakeStrategyForTradeCountFloor:
+    """One mode produces a single, huge-expectancy trade; the other produces
+    many trades with modest but positive expectancy each. Without a min_trades
+    floor, grid_search would chase the lucky single trade."""
+
+    def add_entry_signals(self, df, mode):
+        df = df.copy()
+        if mode == "lucky":
+            signals = [None] * len(df)
+            signals[0] = "long"
+        else:
+            signals = ["long"] * len(df)
+        df["entry_signal"] = signals
+        return df
+
+    def open_position(self, entry_index, entry_bar, direction, mode=None, **params):
+        return Position(
+            direction=direction,
+            entry_index=entry_index,
+            entry_price=entry_bar["open"],
+            stop_price=entry_bar["open"] - 10.0,
+            target_price=None,
+        )
+
+    def check_exit(self, position, bar, mode=None, **params):
+        if mode == "lucky":
+            return position.entry_price + 1000.0
+        return position.entry_price + 3.0
+
+
+def test_grid_search_prefers_high_trade_count_over_lucky_single_trade():
+    df = pd.DataFrame({"open": [100.0] * 80})
+
+    best = grid_search(
+        df,
+        FakeStrategyForTradeCountFloor(),
+        param_grid={"mode": ["lucky", "consistent"]},
+    )
+
+    assert best == {"mode": "consistent"}
