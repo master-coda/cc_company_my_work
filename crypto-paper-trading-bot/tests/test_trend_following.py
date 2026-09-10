@@ -9,11 +9,31 @@ def test_add_entry_signals_fires_on_adx_and_donchian_breakout():
         "adx":             [25,  25,  25,  25],
         "donchian_upper":  [105, 105, 105, 105],
         "donchian_lower":  [95,  95,  95,  95],
+        "volume_ratio":    [1.0, 1.2, 1.1, 1.5],  # すべて volume_up
     })
 
     result = trend_following.add_entry_signals(df, adx_threshold=20.0)
 
     assert result["entry_signal"].tolist() == [None, None, None, "long"]
+
+
+def test_add_entry_signals_requires_volume_confirmation():
+    """トレンドフォロー型でボリューム確認が必須"""
+    df = pd.DataFrame({
+        "close": [100, 101, 102, 110],
+        "adx": [25, 25, 25, 25],
+        "donchian_upper": [105, 105, 105, 105],
+        "donchian_lower": [95, 95, 95, 95],
+        "volume_ratio": [1.0, 1.2, 0.8, 1.5],
+    })
+
+    result = trend_following.add_entry_signals(df, adx_threshold=20.0)
+
+    # 改善前：3番目（index 2）でもシグナルあり（ボリューム無視）
+    # 改善後：3番目はボリューム低下のためシグナルなし、4番目のみシグナルあり
+    signals = result["entry_signal"].tolist()
+    assert signals[2] is None  # ボリューム低下のためシグナルなし
+    assert signals[3] == "long"  # 出来高増加＋ブレイクアウトのためシグナルあり
 
 
 def test_add_entry_signals_requires_trend_strength():

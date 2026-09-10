@@ -11,9 +11,12 @@ def add_entry_signals(df: pd.DataFrame, adx_threshold: float = 20.0, **_) -> pd.
     breaks_high = df["close"] > df["donchian_upper"].shift(1)
     breaks_low = df["close"] < df["donchian_lower"].shift(1)
 
+    # ボリューム確認（volume_ratio > 1.0）
+    volume_up = df.get("volume_ratio", 1.0) > 1.0
+
     signal = pd.Series([None] * len(df), index=df.index, dtype=object)
-    signal[is_trending & breaks_high] = "long"
-    signal[is_trending & breaks_low] = "short"
+    signal[is_trending & breaks_high & volume_up] = "long"
+    signal[is_trending & breaks_low & volume_up] = "short"
     df["entry_signal"] = signal
     return df
 
