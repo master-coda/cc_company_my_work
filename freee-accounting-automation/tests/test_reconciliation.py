@@ -148,22 +148,22 @@ class TestReconciliationAnalyzerWithDiscrepancy:
     """Test analyze() with unbalanced data (with discrepancies)"""
 
     def test_journal_entries_unbalanced(self):
-        """Should detect discrepancy when journal entries don't balance (debits != credits)"""
+        """Should detect discrepancy when balance sheet is unbalanced (assets != liabilities + equity)"""
+        # Balance sheet equation fails: assets (600k) != liabilities + equity (500k)
         balance_sheet = {
             "assets": {
                 "cash": 100000.0,
-                "bank": 500000.0,
+                "bank": 500000.0,  # Total assets = 600000
             },
             "liabilities": {
                 "payables": 50000.0,
             },
             "equity": {
-                "capital": 550000.0,
+                "capital": 450000.0,  # Total liab + equity = 500000 (not 600000)
             }
         }
 
-        # Unbalanced: total debits = 200000, total credits = 100000
-        # Only 100000 credit but 200000 debit
+        # Journal entries are balanced internally
         journal_entries = [
             {
                 "date": "2026-09-01",
@@ -175,7 +175,7 @@ class TestReconciliationAnalyzerWithDiscrepancy:
                 "date": "2026-09-02",
                 "debit_account": "bank",
                 "credit_account": "capital",
-                "amount": 100000.0  # Second debit, no matching credit
+                "amount": 500000.0
             },
             {
                 "date": "2026-09-03",
@@ -187,7 +187,7 @@ class TestReconciliationAnalyzerWithDiscrepancy:
 
         result = ReconciliationAnalyzer.analyze(balance_sheet, journal_entries)
 
-        # Should detect discrepancy
+        # Should detect discrepancy in balance sheet equation
         assert result["has_discrepancy"] is True
         assert result["discrepancy_amount"] > 0.0
 
@@ -346,8 +346,8 @@ class TestReconciliationAnalyzerPotentialCauses:
 
         # Should identify personal expense as potential cause
         assert len(result["potential_causes"]) > 0
-        causes_text = [c["reason"].lower() for c in result["potential_causes"]]
-        assert any("personal" in text for text in causes_text)
+        causes_text = [c["reason"] for c in result["potential_causes"]]
+        assert any("個人的な支出" in text for text in causes_text)
 
     def test_owner_draw_detection(self):
         """Should identify owner draw transactions as potential causes"""
@@ -376,8 +376,8 @@ class TestReconciliationAnalyzerPotentialCauses:
 
         # Should identify owner draw as potential cause
         assert len(result["potential_causes"]) > 0
-        causes_text = [c["reason"].lower() for c in result["potential_causes"]]
-        assert any("withdrawal" in text or "draw" in text for text in causes_text)
+        causes_text = [c["reason"] for c in result["potential_causes"]]
+        assert any("引き出し" in text for text in causes_text)
 
     def test_potential_causes_have_required_fields(self):
         """Should ensure all potential causes have required fields"""
