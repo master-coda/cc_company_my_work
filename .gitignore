@@ -3,3 +3,4 @@ crypto-paper-trading-bot/reports/*.json
 __pycache__/
 *.pyc
 .superpowers/
+crypto-paper-trading-bot/.venv/

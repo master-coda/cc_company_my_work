@@ -1,0 +1,125 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Paper Trading Dashboard - Trend Following</title>
+        <meta charset="UTF-8">
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+                background-color: #f5f5f5;
+            }
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                background-color: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            h1 {
+                color: #333;
+                border-bottom: 3px solid #007bff;
+                padding-bottom: 10px;
+            }
+            .metrics {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 15px;
+                margin: 20px 0;
+            }
+            .metric {
+                background: #f9f9f9;
+                padding: 15px;
+                border-radius: 5px;
+                text-align: center;
+                border-left: 4px solid #007bff;
+            }
+            .metric-label {
+                font-size: 12px;
+                color: #666;
+                text-transform: uppercase;
+            }
+            .metric-value {
+                font-size: 24px;
+                font-weight: bold;
+                color: #333;
+                margin-top: 5px;
+            }
+            .positive { color: #28a745; }
+            .negative { color: #dc3545; }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+            th {
+                background-color: #007bff;
+                color: white;
+                padding: 10px;
+                text-align: left;
+            }
+            td {
+                padding: 10px;
+                border-bottom: 1px solid #ddd;
+            }
+            tr:hover {
+                background-color: #f9f9f9;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>📊 Paper Trading Dashboard - Trend Following</h1>
+
+            <div class="metrics">
+                <div class="metric">
+                    <div class="metric-label">Initial Capital</div>
+                    <div class="metric-value">$30,000.00</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Current Equity</div>
+                    <div class="metric-value">$30,000.00</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Total PnL</div>
+                    <div class="metric-value positive">$0.00</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">PnL %</div>
+                    <div class="metric-value positive">0.00%</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Total Trades</div>
+                    <div class="metric-value">0</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Win Rate</div>
+                    <div class="metric-value">0.0%</div>
+                </div>
+            </div>
+
+            <h2>Trade History</h2>
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>Timestamp</th>
+                    <th>Symbol</th>
+                    <th>Entry Price</th>
+                    <th>Exit Price</th>
+                    <th>Quantity</th>
+                    <th>PnL</th>
+                </tr>
+                <tr><td colspan="7" style="text-align: center; color: #999;">No trades yet</td></tr>
+            </table>
+
+            <div style="margin-top: 30px; font-size: 12px; color: #999; text-align: right;">
+                Generated: 2026-09-10T06:28:25.681698Z
+                <br>
+                Simulating Trend Following Strategy with Initial Capital $30,000.00
+            </div>
+        </div>
+    </body>
+    </html>
+    
