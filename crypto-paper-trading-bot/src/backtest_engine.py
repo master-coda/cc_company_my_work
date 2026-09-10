@@ -20,7 +20,21 @@ def run_backtest(
         next_bar = df.iloc[i + 1]
 
         if position is not None:
-            exit_price = strategy.check_exit(position, bar, **strategy_params)
+            exit_price = None
+
+            # ターゲット価格チェック
+            if position.target_price is not None:
+                if position.direction == "long" and bar["high"] >= position.target_price:
+                    exit_price = position.target_price
+                elif position.direction == "short" and bar["low"] <= position.target_price:
+                    exit_price = position.target_price
+
+            # ストップロス/トレイリングストップチェック（ターゲット未達なら）
+            if exit_price is None:
+                strategy_exit = strategy.check_exit(position, bar, **strategy_params)
+                if strategy_exit is not None:
+                    exit_price = strategy_exit
+
             if exit_price is not None:
                 trade = _close_trade(position, exit_price, equity, risk_per_trade, fee_rate, slippage_rate, i)
                 trades.append(trade)
