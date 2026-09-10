@@ -44,8 +44,8 @@ def build_comparison_report(raw_df: pd.DataFrame) -> dict:
     report = {}
     for name, (strategy, param_grid) in STRATEGIES.items():
         best_params = grid_search(train_df, strategy, param_grid)
-        train_trades = run_backtest(train_df.copy(), strategy, strategy_params=best_params)
-        test_trades = run_backtest(test_df.copy(), strategy, strategy_params=best_params)
+        train_trades = run_backtest(train_df.copy(), strategy, strategy_params=best_params, use_dynamic_risk=True)
+        test_trades = run_backtest(test_df.copy(), strategy, strategy_params=best_params, use_dynamic_risk=True)
         report[name] = {
             "best_params": best_params,
             "train": evaluate(train_trades),
