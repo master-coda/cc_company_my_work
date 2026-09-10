@@ -20,11 +20,16 @@ def add_entry_signals(df: pd.DataFrame, adx_threshold: float = 20.0, **_) -> pd.
 
 def open_position(entry_index: int, entry_bar: pd.Series, direction: str, atr_multiplier: float = 2.0, **_) -> Position:
     entry_price = entry_bar["open"]
+    atr_distance = atr_multiplier * entry_bar["atr"]
+
     if direction == "long":
-        stop_price = entry_price - atr_multiplier * entry_bar["atr"]
+        stop_price = entry_price - atr_distance
+        target_price = entry_price + atr_distance
     else:
-        stop_price = entry_price + atr_multiplier * entry_bar["atr"]
-    return Position(direction=direction, entry_index=entry_index, entry_price=entry_price, stop_price=stop_price, target_price=None)
+        stop_price = entry_price + atr_distance
+        target_price = entry_price - atr_distance
+
+    return Position(direction=direction, entry_index=entry_index, entry_price=entry_price, stop_price=stop_price, target_price=target_price)
 
 
 def check_exit(position: Position, bar: pd.Series, atr_multiplier: float = 2.0, **_) -> Optional[float]:

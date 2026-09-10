@@ -29,6 +29,36 @@ def test_add_entry_signals_requires_trend_strength():
     assert result["entry_signal"].tolist() == [None, None]
 
 
+def test_open_position_sets_target_price_for_long():
+    entry_bar = pd.Series({"open": 100.0, "atr": 5.0})
+
+    position = trend_following.open_position(
+        entry_index=10,
+        entry_bar=entry_bar,
+        direction="long",
+        atr_multiplier=2.0
+    )
+
+    assert position.entry_price == 100.0
+    assert position.stop_price == 90.0
+    assert position.target_price == 110.0
+
+
+def test_open_position_sets_target_price_for_short():
+    entry_bar = pd.Series({"open": 100.0, "atr": 5.0})
+
+    position = trend_following.open_position(
+        entry_index=10,
+        entry_bar=entry_bar,
+        direction="short",
+        atr_multiplier=2.0
+    )
+
+    assert position.entry_price == 100.0
+    assert position.stop_price == 110.0
+    assert position.target_price == 90.0
+
+
 def test_check_exit_trails_stop_and_triggers_on_breach():
     position = Position(direction="long", entry_index=0, entry_price=100.0, stop_price=90.0, target_price=None)
     bar_1 = pd.Series({"high": 105.0, "low": 104.0, "atr": 2.0})
