@@ -58,6 +58,22 @@ def test_open_position_with_high_rr_ratio():
     assert position.target_price == 112.0  # 100 + (1.5*4)*2.0
 
 
+def test_add_entry_signals_requires_all_three_conditions():
+    """平均回帰型で3つの条件を同時確認"""
+    df = pd.DataFrame({
+        "close": [100, 90, 85, 80],
+        "adx": [10, 10, 10, 10],
+        "bb_lower": [95, 95, 95, 95],
+        "bb_upper": [105, 105, 105, 105],
+        "rsi": [50, 25, 20, 15],
+    })
+
+    result = mean_reversion.add_entry_signals(df, adx_threshold=20.0, rsi_oversold=30.0)
+
+    # 3番目のみ全条件満たす（is_ranging & close <= bb_lower & rsi < oversold）
+    assert result["entry_signal"].iloc[3] == "long"
+
+
 def test_check_exit_triggers_on_stop_or_target():
     position = Position(direction="long", entry_index=0, entry_price=100.0, stop_price=94.0, target_price=109.0)
 
