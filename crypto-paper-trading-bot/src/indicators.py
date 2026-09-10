@@ -27,4 +27,9 @@ def add_indicators(df: pd.DataFrame) -> pd.DataFrame:
 
     df["sma20"] = df["close"].rolling(window=20).mean()
 
+    # ボリューム前期比（volume カラムがある場合のみ）
+    if "volume" in df.columns:
+        df["volume_prev"] = df["volume"].shift(1)
+        df["volume_ratio"] = df["volume"] / df["volume_prev"]
+
     return df
