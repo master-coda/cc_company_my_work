@@ -41,6 +41,23 @@ def test_open_position_sets_fixed_stop_and_target():
     assert position.target_price == 109.0  # 100 + (1.5*4)*1.5
 
 
+def test_open_position_with_high_rr_ratio():
+    """平均回帰型で、高いRR比を設定"""
+    entry_bar = pd.Series({"open": 100.0, "atr": 4.0})
+
+    position = mean_reversion.open_position(
+        entry_index=5,
+        entry_bar=entry_bar,
+        direction="long",
+        stop_atr_multiplier=1.5,
+        rr_ratio=2.0  # RR比を 2.0 に設定
+    )
+
+    assert position.entry_price == 100.0
+    assert position.stop_price == 94.0  # 100 - 1.5*4
+    assert position.target_price == 112.0  # 100 + (1.5*4)*2.0
+
+
 def test_check_exit_triggers_on_stop_or_target():
     position = Position(direction="long", entry_index=0, entry_price=100.0, stop_price=94.0, target_price=109.0)
 

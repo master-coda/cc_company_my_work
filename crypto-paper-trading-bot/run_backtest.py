@@ -21,7 +21,7 @@ MEAN_REVERSION_GRID = {
     "rsi_oversold": [25, 30, 35],
     "rsi_overbought": [65, 70, 75],
     "stop_atr_multiplier": [1.0, 1.5, 2.0],
-    "rr_ratio": [1.0, 1.5, 2.0],
+    "rr_ratio": [1.5, 2.0, 2.5],
 }
 
 STRATEGIES = {
