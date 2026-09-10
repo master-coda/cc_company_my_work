@@ -1,4 +1,5 @@
 import pandas as pd
+from src.position_sizing import calculate_dynamic_risk
 
 
 def run_backtest(
@@ -9,15 +10,22 @@ def run_backtest(
     risk_per_trade: float = 0.005,
     fee_rate: float = 0.001,
     slippage_rate: float = 0.0005,
+    use_dynamic_risk: bool = False,
 ) -> pd.DataFrame:
     df = strategy.add_entry_signals(df, **strategy_params)
     trades = []
     equity = initial_capital
     position = None
+    recent_trades_list = []  # 動的リスク計算用の直近取引リスト
 
     for i in range(len(df) - 1):
         bar = df.iloc[i]
         next_bar = df.iloc[i + 1]
+
+        # 動的リスク計算（use_dynamic_risk が True の場合）
+        current_risk = risk_per_trade
+        if use_dynamic_risk:
+            current_risk = calculate_dynamic_risk(recent_trades_list, base_risk=risk_per_trade)
 
         if position is not None:
             exit_price = None
@@ -36,8 +44,9 @@ def run_backtest(
                     exit_price = strategy_exit
 
             if exit_price is not None:
-                trade = _close_trade(position, exit_price, equity, risk_per_trade, fee_rate, slippage_rate, i)
+                trade = _close_trade(position, exit_price, equity, current_risk, fee_rate, slippage_rate, i)
                 trades.append(trade)
+                recent_trades_list.append(trade)  # 直近取引リストに追加
                 equity += trade["pnl"]
                 position = None
                 continue

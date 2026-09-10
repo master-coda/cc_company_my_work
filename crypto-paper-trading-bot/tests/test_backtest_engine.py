@@ -104,6 +104,24 @@ def test_run_backtest_exits_on_target_price():
     assert trade["exit_price"] > 120.0  # ターゲット価格でエグジット
 
 
+def test_run_backtest_with_dynamic_risk_parameter():
+    """use_dynamic_risk パラメータが受け入れられることを確認"""
+    trades = run_backtest(
+        _make_df(),
+        FakeStrategy(),
+        strategy_params={},
+        initial_capital=50000.0,
+        risk_per_trade=0.005,
+        fee_rate=0.0,
+        slippage_rate=0.0,
+        use_dynamic_risk=True,
+    )
+
+    assert len(trades) == 1
+    trade = trades.iloc[0]
+    assert trade["direction"] == "long"
+
+
 def test_run_backtest_applies_fees_and_slippage():
     trades = run_backtest(
         _make_df(),
