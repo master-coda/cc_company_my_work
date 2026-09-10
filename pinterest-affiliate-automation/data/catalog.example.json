@@ -1,0 +1,37 @@
+{
+  "products": [
+    {
+      "id": "camera-strap-01",
+      "name_ja": "本革カメラストラップ",
+      "name_en": "Leather Camera Strap",
+      "category": "accessory",
+      "a8net_link": "https://px.a8.net/svt/ejp?a8mat=REPLACE_WITH_REAL_LINK",
+      "overseas_link": {
+        "name": "amazon_us",
+        "url": "https://www.amazon.com/dp/REPLACE_WITH_REAL_ASIN?tag=REPLACE_WITH_AFFILIATE_TAG"
+      }
+    },
+    {
+      "id": "tripod-carbon-01",
+      "name_ja": "カーボン三脚",
+      "name_en": "Carbon Fiber Tripod",
+      "category": "tripod",
+      "a8net_link": "https://px.a8.net/svt/ejp?a8mat=REPLACE_WITH_REAL_LINK",
+      "overseas_link": {
+        "name": "amazon_us",
+        "url": "https://www.amazon.com/dp/REPLACE_WITH_REAL_ASIN?tag=REPLACE_WITH_AFFILIATE_TAG"
+      }
+    },
+    {
+      "id": "led-panel-01",
+      "name_ja": "LED照明パネル",
+      "name_en": "LED Light Panel",
+      "category": "lighting",
+      "a8net_link": "https://px.a8.net/svt/ejp?a8mat=REPLACE_WITH_REAL_LINK",
+      "overseas_link": {
+        "name": "amazon_us",
+        "url": "https://www.amazon.com/dp/REPLACE_WITH_REAL_ASIN?tag=REPLACE_WITH_AFFILIATE_TAG"
+      }
+    }
+  ]
+}
