@@ -1,0 +1,21 @@
+{
+  "initial_capital": 200.0,
+  "current_equity": 200.54,
+  "total_pnl": 0.5399999999999983,
+  "total_trades": 1,
+  "win_rate": 1.0,
+  "timestamp": "2026-09-10T23:22:12.119520",
+  "trades": [
+    {
+      "timestamp": "2026-09-10T06:39:45.394217Z",
+      "symbol": "BTC/USDT",
+      "side": "buy",
+      "entry_price": 78358.63,
+      "exit_price": 80474.31301,
+      "quantity": 0.0002552367237660995,
+      "pnl": 0.5399999999999983
+    }
+  ],
+  "current_position": null,
+  "position_entry_bar": null
+}
